@@ -33,6 +33,7 @@ const formSchema = z.object({
     name: z.string().min(1),
     images: z.object({ url: z.string() }).array(),
     price: z.coerce.number().min(1),
+    compareAtPrice: z.coerce.number().min(1),
     categoryId: z.string().min(1),
     colorId: z.string().min(1),
     sizeId: z.string().min(1),
@@ -65,11 +66,13 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         resolver: zodResolver(formSchema),
         defaultValues: initialData  ?{
             ...initialData,
-            price: parseFloat(String(initialData?.price))
+            price: parseFloat(String(initialData?.price)),
+            compareAtPrice: parseFloat(String(initialData?.compareAtPrice)),
         } : {
             name: '',
             images: [],
             price: 0,
+            compareAtPrice:0,
             categoryId: '',
             colorId: '',
             sizeId: '',
@@ -198,7 +201,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                         defaultValue={field.value}
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger className="w-[180px]">
                             <SelectValue
                               defaultValue={field.value}
                               placeholder="Select a category"
@@ -206,6 +209,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
+                          
                           {categories.map((category) => (
                             <SelectItem key={category.id} value={category.id}>
                               {category.name}
@@ -271,6 +275,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
+                <FormField
+                  control={form.control}
+                  name="compareAtPrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Compare at Price</FormLabel>
+                      <FormControl>
+                        <Input type="number" disabled={loading} placeholder="9.99" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   control={form.control}
                   name="isFeatured"
