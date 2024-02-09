@@ -34,7 +34,9 @@ export async function PATCH(req: Request, { params }: { params: { storeId: strin
        
         const { 
             name, 
+            desc,
             price,
+            compareAtPrice,
             categoryId,
             colorId,
             sizeId,
@@ -47,13 +49,19 @@ export async function PATCH(req: Request, { params }: { params: { storeId: strin
             return new NextResponse('Unauthenticated', { status: 401 });
         }
         if (!name) {
-            return new NextResponse("name is required", { status: 400 });
+            return new NextResponse("Name is required", { status: 400 });
+        }
+        if (!desc) {
+            return new NextResponse("Description is required", { status: 400 });
         }
         if (!images || !images.length) {
             return new NextResponse("Images is required", { status: 400 });
         }
         if (!price) {
             return new NextResponse("price Url is required", { status: 400 });
+        }
+        if (!compareAtPrice) {
+            return new NextResponse("Compare at price Url is required", { status: 400 });
         }
         if (!categoryId) {
             return new NextResponse("Category Id is required", { status: 400 });
@@ -88,7 +96,9 @@ export async function PATCH(req: Request, { params }: { params: { storeId: strin
             },
             data: {
                 name, 
+                desc,
                 price,
+                compareAtPrice,
                 categoryId,
                 colorId,
                 sizeId,

@@ -17,6 +17,7 @@ model Store {
   products        Product[]  @relation("StoreToProduct")
   sizes           Size[]     @relation("StoreToSize")
   colors          Color[]     @relation("StoreToColor")
+  description     Description[] @relation ("StoreToDescription")
   orders          Order[]     @relation("StoreToOrder")
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
@@ -56,16 +57,20 @@ model Product {
   store       Store     @relation("StoreToProduct", fields: [storeId], references: [id])
   categoryId  String    // Foreign Key to Category
   category    Category  @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  descriptionId  String?    // Foreign Key to Category
+  
   name        String
+  desc        String? 
   price       Float
-  compareAtPrice  Float   @default(0.0)  
+  compareAtPrice  Float    
   isFeatured  Boolean   @default(false)
   isArchived  Boolean   @default(false)
   sizeId      String    // Foreign Key to Size
   size        Size      @relation(fields: [sizeId], references: [id])
   colorId     String    // Foreign Key to Color
   color       Color     @relation(fields: [colorId], references: [id])
-  images      Image[]   // Relation to Image model
+  description Description? @relation(fields: [descriptionId], references: [id])
+  images      Image[]   // Relation to Image model.
   orderItems  OrderItem[]   // Relation to Order model
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -74,6 +79,7 @@ model Product {
   @@index([categoryId])
   @@index([sizeId])
   @@index([colorId])
+  @@index ([descriptionId])
 }
 
 model Order {
@@ -119,6 +125,18 @@ model Color {
   id          String   @id @default(uuid()) @map("_id")
   storeId     String   // Foreign Key to Store
   store       Store    @relation("StoreToColor", fields: [storeId], references: [id])
+  name        String
+  value       String
+  products    Product[] // Relation to Product model
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@index([storeId])
+}
+model Description {
+  id          String   @id @default(uuid()) @map("_id")
+  storeId     String   // Foreign Key to Store
+  store       Store    @relation("StoreToDescription", fields: [storeId], references: [id])
   name        String
   value       String
   products    Product[] // Relation to Product model

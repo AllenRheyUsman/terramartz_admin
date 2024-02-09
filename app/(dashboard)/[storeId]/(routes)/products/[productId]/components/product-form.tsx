@@ -31,6 +31,7 @@ interface ProductFormProps {
 
 const formSchema = z.object({
     name: z.string().min(1),
+    desc: z.string().min(1),
     images: z.object({ url: z.string() }).array(),
     price: z.coerce.number().min(1),
     compareAtPrice: z.coerce.number().min(1),
@@ -70,6 +71,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             compareAtPrice: parseFloat(String(initialData?.compareAtPrice)),
         } : {
             name: '',
+            desc:'',
             images: [],
             price: 0,
             compareAtPrice:0,
@@ -177,10 +179,36 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 />
                 <FormField
                   control={form.control}
+                  name="desc"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Description</FormLabel>
+                      <FormControl>
+                        <Input disabled={loading} placeholder="Product desc" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="price"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Price</FormLabel>
+                      <FormControl>
+                        <Input type="number" disabled={loading} placeholder="9.99" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                  <FormField
+                  control={form.control}
+                  name="compareAtPrice"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Compare at Price</FormLabel>
                       <FormControl>
                         <Input type="number" disabled={loading} placeholder="9.99" {...field} />
                       </FormControl>
@@ -275,19 +303,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 </FormItem>
               )}
             />
-                <FormField
-                  control={form.control}
-                  name="compareAtPrice"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Compare at Price</FormLabel>
-                      <FormControl>
-                        <Input type="number" disabled={loading} placeholder="9.99" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+              
                 <FormField
                   control={form.control}
                   name="isFeatured"
